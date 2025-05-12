@@ -1,0 +1,83 @@
+services:
+  backend:
+    build:
+        context: ../backend
+    container_name: backend
+    command: gunicorn project.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@demo-blog.ru
+      - DJANGO_SUPERUSER_PASSWORD=admin
+      - DOMAIN=${DOMAIN}
+      - DEBUG=${DEBUG}
+
+    volumes:
+        - ../backend:/app
+        - static_volume:/app/staticfiles
+
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - blog
+
+  nginx:
+    image: nginx:stable-alpine-slim
+    build:
+      context: ../
+      dockerfile: infra/nginx/Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    environment:
+      - DOMAIN=${DOMAIN}
+      - WITH_PROXY=${WITH_PROXY}
+    volumes:
+      - static_volume:/app/staticfiles
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+    networks:
+      - blog
+
+  postgres:
+    image: postgres:17.2-alpine3.21
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - blog
+
+  redis:
+    image: redis:8.0-M03-alpine
+    container_name: redis
+    restart: always
+    networks:
+      - blog
+
+volumes:
+  pgdata:
+  static_volume:
+  certbot_www:
+  certbot_conf:
+
+networks:
+  blog:
+    name: blog
+    driver: bridge

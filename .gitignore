@@ -1,0 +1,22 @@
+# === backend/ ===
+.env
+.venv/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# === frontend/ ===
+node_modules/
+dist/
+*.local
+
+
+# === infra/ ===
+infra/pgdata/
+infra/*.env
+
+# === global/ ===
+**/.idea/
