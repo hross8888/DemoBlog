@@ -48,8 +48,6 @@ npm run dev
 git clone...
 chmod 744 DemoBlog/backend/entrypoint.sh
 cd DemoBlog/infra
-chmod 744 get-docker.sh
-./get-docker.sh
 cp .env.example .env # заполните настройки базы и JWT
 docker compose up --build
 ```
