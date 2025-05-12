@@ -1,6 +1,6 @@
 import redis
 from django.apps import AppConfig
-from django.conf import settings
+from backend import settings
 
 from . import redis_wrapper
 
