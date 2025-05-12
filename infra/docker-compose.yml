@@ -19,7 +19,6 @@ services:
       - DJANGO_SUPERUSER_EMAIL=admin@demo-blog.ru
       - DJANGO_SUPERUSER_PASSWORD=admin
       - DOMAIN=${DOMAIN}
-      - DEBUG=${DEBUG}
 
     volumes:
         - ../backend:/app

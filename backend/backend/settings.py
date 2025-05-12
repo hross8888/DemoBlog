@@ -15,11 +15,10 @@ from pathlib import Path
 
 from corsheaders.defaults import default_headers
 
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = True
 
 if DEBUG:
     from dotenv import load_dotenv
-
     load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
