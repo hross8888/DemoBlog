@@ -46,7 +46,6 @@ npm run dev
 ### 📍 Prod
 ```bash
 git clone...
-chmod 744 DemoBlog/backend/entrypoint.sh
 cd DemoBlog/infra
 cp .env.example .env # заполните настройки базы и JWT
 docker compose up --build
